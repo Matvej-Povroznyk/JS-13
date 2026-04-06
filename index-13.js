@@ -12,68 +12,83 @@
 
 /* TASK 1 & 2 */
 // 1: DONE
-// 2 - CODE BELOW
+// 2 - CODE BELOW | DONE
 
-/*
- * Типів транзацкій всього два.
- * Можна покласти або зняти гроші з рахунку.
- */
 const Transaction = {
-  DEPOSIT: 'deposit',
-  WITHDRAW: 'withdraw',
+  DEPOSIT: "deposit",
+  WITHDRAW: "withdraw",
 };
 
-/*
- * Кожна транзакція - це об'єкт з властивостями: id, type і amount
- */
 const account = {
-  // Поточний баланс рахунку
   balance: 0,
-
-  // Історія транзакцій
-
   transactions: [],
-  /*
-   * Метод створює і повертає об'єкт транзакції.
-   * Приймає суму і тип транзакції.
-   */
 
-  createTransaction(amount, type) {},
-  /*
-   * Метод відповідає за додавання суми до балансу.
-   * Приймає суму танзакції.
-   * Викликає createTransaction для створення об'єкта транзакції
-   * після чого додає його в історію транзакцій
-   */
-  deposit(amount) {},
+  createTransaction(amount, type) {
+    return {
+      id: this.transactions.length + 1,
+      type,
+      amount,
+    };
+  },
 
-  /*
-   * Метод відповідає за зняття суми з балансу.
-   * Приймає суму танзакції.
-   * Викликає createTransaction для створення об'єкта транзакції
-   * після чого додає його в історію транзакцій.
-   *
-   * Якщо amount більше, ніж поточний баланс, виводь повідомлення
-   * про те, що зняття такої суми не можливо, недостатньо коштів.
-   */
-  withdraw(amount) {},
+  deposit(amount) {
+    const transaction = this.createTransaction(amount, Transaction.DEPOSIT);
 
-  /*
-   * Метод повертає поточний баланс
-   */
-  getBalance() {},
-  /*
-   * Метод шукає і повертає об'єкт транзакції по id
-   */
-  getTransactionDetails(id) {},
+    this.balance += amount;
+    this.transactions.push(transaction);
+  },
 
-  /*
+  withdraw(amount) {
+    const transaction = this.createTransaction(amount, Transaction.WITHDRAW);
 
-   * Метод повертає кількість коштів
-   * певного типу транзакції з усієї історії транзакцій
-   */
-  getTransactionTotal(type) {},
+    if (amount > this.balance) {
+      console.log("Error: Insufficient funds.");
+      return;
+    }
+    this.balance -= amount;
+    this.transactions.push(transaction);
+  },
+
+  getBalance() {
+    return this.balance;
+  },
+
+  getTransactionDetails(id) {
+    for (const transaction of this.transactions) {
+      if (transaction.id === id) {
+        return transaction;
+      }
+    }
+    return null;
+  },
+
+  getTransactionTotal(type) {
+    let total = 0;
+    for (const transaction of this.transactions) {
+      if (transaction.type.toLowerCase() === type.toLowerCase()) {
+        total += transaction.amount;
+      }
+    }
+
+    return total;
+  },
 };
+
+// TEST
+console.log(`Current balance is ${account.getBalance()} UAH`); // 0
+account.deposit(1000); // 0 + 1000 = 1000
+account.deposit(500); // 1000 + 500 = 1500
+account.withdraw(300); // 1500 - 300 = 1200
+account.withdraw(2000); // 1500 - 2000 = -500 (Error: Insufficient funds)
+
+console.log(`Current balance is ${account.getBalance()} UAH`); // 1200
+console.log(`Transaction #2 Details`, account.getTransactionDetails(2));
+console.log(
+  `Total deposits: ${account.getTransactionTotal(Transaction.DEPOSIT)}`,
+);
+console.log(
+  `Total withdraws: ${account.getTransactionTotal(Transaction.WITHDRAW)}`,
+);
 
 /*
  * ================
