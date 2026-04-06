@@ -11,7 +11,7 @@
  */
 
 /* TASK 1 & 2 */
-// 1: NOT READY
+// 1: DONE
 // 2 - HERE WILL BE TASK 2
 
 /*
